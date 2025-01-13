@@ -20,14 +20,11 @@ public class ImageController {
     @PostMapping("/convert")
     public ResponseEntity<String> convertToWebp(@RequestParam("file") MultipartFile file) {
         try {
-            // Faylni vaqtinchalik joyga saqlash
             File tempFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
             file.transferTo(tempFile);
 
-            // WebP formatiga o'zgartirish va saqlash
             String outputFilePath = webpUtilsService.imageFileToWebpImageFile(tempFile);
 
-            // Saqlangan faylning yo'lini qaytarish
             return ResponseEntity.ok(outputFilePath);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing image");

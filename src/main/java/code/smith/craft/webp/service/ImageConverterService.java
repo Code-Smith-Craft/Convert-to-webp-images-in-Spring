@@ -18,28 +18,22 @@ import java.io.IOException;
 public class ImageConverterService {
 
     public String imageFileToWebpImageFile(File inputFile) throws IOException {
-        // Tasvirni o'qing
         BufferedImage image = ImageIO.read(inputFile);
 
-        // WebP ImageWriter ni oling
         ImageWriter writer = ImageIO.getImageWritersByMIMEType("image/webp").next();
 
-        // WebP parametrlarini sozlash
         WebPWriteParam writeParam = new WebPWriteParam(writer.getLocale());
         writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
         writeParam.setCompressionType(writeParam.getCompressionTypes()[WebPWriteParam.LOSSY_COMPRESSION]); // Yo'qotishli siqish
 
-        // Siqish sifatini belgilash (0.0 - 1.0 oralig'ida, 1.0 eng yuqori sifat)
-        writeParam.setCompressionQuality(0.75f); // 75% sifat, bu hajmni sezilarli darajada kamaytiradi
+        writeParam.setCompressionQuality(0.75f);
 
-        // Rasmni saqlash uchun papkaga saqlash yo'li
-        String outputDirectory = "uploaded_images/"; // Tashqi papka (resources papkasidan tashqarida)
+        String outputDirectory = "uploaded_images/";
         File outputDir = new File(outputDirectory);
         if (!outputDir.exists()) {
-            outputDir.mkdirs();  // Agar papka mavjud bo'lmasa, uni yaratamiz
+            outputDir.mkdirs();
         }
 
-        // Faylni WebP formatida saqlash
         String outputFileName = "converted_" + System.currentTimeMillis() + ".webp";
         String outputFilePath = outputDirectory + outputFileName;
         File outputFile = new File(outputFilePath);
@@ -50,13 +44,12 @@ public class ImageConverterService {
         ios.flush();
         ios.close();
 
-        // Fayl URL manzilini qaytarish
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/uploads/")
                 .path(outputFileName)
                 .toUriString();
 
-        return fileDownloadUri;  // Saqlangan rasmning URL manzilini qaytarish
+        return fileDownloadUri;
     }
 
 }
